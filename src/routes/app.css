@@ -1,0 +1,10 @@
+.visually-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute;
+  clip-path: inset(0px 0px 99.9% 99.9%);
+  border: 0;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
