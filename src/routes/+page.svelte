@@ -32,7 +32,7 @@
 
 <article>
   <h1>Upload image</h1>
-  <form method="post" use:enhance enctype="multipart/form-data"pn>
+  <form method="post" use:enhance enctype="multipart/form-data">
     <label for="image">
       <img id="avatar" src="{src}" alt="avatar" />
       Change image
