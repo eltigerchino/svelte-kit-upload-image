@@ -5,36 +5,46 @@
   export let form;
 
   /** @type {string | undefined }*/
-  let avatar = "avatar.png";
+  let src = "/avatar.png";
+
+  /**
+   *
+   * @param event {Event}
+   */
+  function handleInput(event) {
+    const file = /** @type {HTMLInputElement} */ (event.target)?.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (!reader.result) return;
+      src = reader.result.toString();
+    };
+    reader.readAsDataURL(file);
+
+    /** @ts-ignore we want to reset the page action data */
+    form = undefined;
+  }
 </script>
 
 <article>
   <h1>Upload image</h1>
-  <form method="post" use:enhance>
-    <label for="image"
-      ><img id="avatar" src="{avatar}" alt="avatar" />Change image</label
-    >
+  <form method="post" use:enhance enctype="multipart/form-data"pn>
+    <label for="image">
+      <img id="avatar" src="{src}" alt="avatar" />
+      Change image
+    </label>
     <input
       id="image"
       class="visually-hidden"
       name="image"
       type="file"
-      accept=".png,.jpg"
+      accept=".png"
       required
-      on:change="{(e) => {
-        if (!(e.target instanceof HTMLInputElement) || !e.target?.files?.[0]) {
-          return;
-        }
-
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (!reader.result) return;
-          avatar = reader.result.toString();
-        };
-        reader.readAsDataURL(file);
-        form = undefined;
-      }}"
+      on:change="{handleInput}"
     />
     {#if form?.missing}
       <p class="error">Please select a new image.</p>
@@ -83,10 +93,13 @@
   }
 
   #avatar {
-    border-radius: 99999px;
+    border-radius: 100%;
+    border: solid 1px #ccc;
     height: 128px;
     width: 128px;
     margin-bottom: 10px;
+    object-fit: cover;
+    font-size: 0;
   }
 
   .upload-btn {
