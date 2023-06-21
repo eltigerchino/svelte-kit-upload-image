@@ -2,17 +2,17 @@
   import { enhance } from "$app/forms";
   import ImageInput from "../lib/ImageInput.svelte";
 
+  /** @type {import('./$types').PageData} */
+  export let data;
+
   /** @type {import('./$types').ActionData} */
   export let form;
-
-  /** @type {string | undefined }*/
-  let src = "/avatar.png";
 </script>
 
 <article>
   <h1>Upload image</h1>
   <form method="post" use:enhance enctype="multipart/form-data">
-    <ImageInput {src} />
+    <ImageInput src={data.avatar} />
     {#if form?.missing}
       <p class="error">Please select a new image.</p>
     {/if}

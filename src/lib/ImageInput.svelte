@@ -21,14 +21,11 @@
       src = reader.result.toString();
     };
     reader.readAsDataURL(file);
-
-    /** @ts-ignore we want to reset the page action data */
-    form = undefined;
   }
 </script>
 
 <label for="image">
-  <img id="avatar" src="{src}" alt="avatar" />
+  <img id="avatar" {src} alt="avatar" />
   Change image
 </label>
 <input
@@ -36,7 +33,7 @@
   class="visually-hidden"
   name="image"
   type="file"
-  accept=".png"
+  accept="image/*"
   required
   on:change="{handleInput}"
 />

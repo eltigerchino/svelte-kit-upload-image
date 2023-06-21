@@ -1,12 +1,19 @@
 import { dev } from "$app/environment";
 import { fail } from "@sveltejs/kit";
 import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { randomUUID } from "node:crypto";
+import { projectRoot } from "$lib/util.server";
 
-const __filename = fileURLToPath(import.meta.url);
+// TODO: persist the filename to a database.
+/** @type {string} */
+let filename;
 
-const __dirname = path.dirname(__filename);
+/** @type {import('./$types').PageServerLoad} */
+export async function load() {
+  return {
+    avatar: filename,
+  };
+}
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -21,12 +28,18 @@ export const actions = {
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    let filepath = `${__dirname}/../../../client/avatar.png`;
+    filename = `/avatar-${randomUUID()}.png`;
+
+    /** @type {string} */
+    let filepath;
     if (dev) {
-      filepath = `static/avatar.png`;
+      filepath = `static${filename}`;
+    } else {
+      filepath = projectRoot + `/public${filename}`;
     }
+
     fs.writeFileSync(filepath, buffer, "base64");
 
-    return { filename: file.name };
+    return { filename };
   },
 };
